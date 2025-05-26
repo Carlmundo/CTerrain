@@ -6,6 +6,10 @@ namespace W2_Terrain_Loader
 {
     public partial class Main : Form
     {
+        private const int DefaultSpawnCount = 18;
+        private const int DefaultMinDistance = 100;
+        private const int CavernMinY = 17;
+        private const int OpenMinY = 0;
         public Main()
         {
             InitializeComponent();
@@ -41,7 +45,6 @@ namespace W2_Terrain_Loader
 
         private void ListDirectory(TreeView treeView, string path)
         {
-
             treeView.Nodes.Clear();
             var rootDirectoryInfo = new DirectoryInfo(path);
 
@@ -78,21 +81,16 @@ namespace W2_Terrain_Loader
         }
         private void LoadLand(string path)
         {
-            using (FileStream fs = File.OpenRead(path)) {
-                try {
+            try {
+                using (FileStream fs = File.OpenRead(path)) {
                     LandData landData = new LandData(fs);
                     pbLand.Image = landData.Foreground.ToBitmap();
-                    if (landData.TopBorder) {
-                        cbCavern.Checked = true;
-                    }
-                    else {
-                        cbCavern.Checked = false;
-                    }
+                    cbCavern.Checked = landData.TopBorder;
                 }
-                catch (Exception e) {
-                    pbLand.Image = null;
-                    MessageBox.Show(e.Message);
-                }
+            }
+            catch (Exception e) {
+                pbLand.Image = null;
+                MessageBox.Show(e.Message);
             }
         }
 
@@ -115,32 +113,24 @@ namespace W2_Terrain_Loader
             Global.fileLocked = fInfo.IsReadOnly;
             if (changeText) {
                 string btnText = " File";
-                if (Global.fileLocked) {
-                    btnLock.Text = "Unlock" + btnText;
-                }
-                else {
-                    btnLock.Text = "Lock" + btnText;
-                }
+                btnLock.Text = (Global.fileLocked ? "Unlock" : "Lock") + btnText;
             }
         }
 
         private void LockFile()
         {
             LockCheck(false);
+            var attributes = File.GetAttributes(Global.fileGame);
             if (Global.fileLocked) {
-                File.SetAttributes(Global.fileGame, File.GetAttributes(Global.fileGame) & ~FileAttributes.ReadOnly);
-
+                File.SetAttributes(Global.fileGame, attributes & ~FileAttributes.ReadOnly);
             }
             else {
-                File.SetAttributes(Global.fileGame, File.GetAttributes(Global.fileGame) | FileAttributes.ReadOnly);
+                File.SetAttributes(Global.fileGame, attributes | FileAttributes.ReadOnly);
             }
             LockCheck(true);
         }
 
-        private void btnLock_Click(object sender, EventArgs e)
-        {
-            LockFile();
-        }
+        private void btnLock_Click(object sender, EventArgs e) => LockFile();
 
         private void btnRefresh_Click(object sender, EventArgs e)
         {
@@ -174,20 +164,14 @@ namespace W2_Terrain_Loader
                         landData.TopBorder = optCavern;
                         if (!landCavern && optCavern && !cbSeed.Checked) {
                             //Set new spawns with the set seed "Open", to avoid Worms spawning above the border
-                            List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), 18, 100, 17, "Open");
+                            List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), DefaultSpawnCount, DefaultMinDistance, CavernMinY, "Open");
                             landData.ObjectLocations = points;
                         }
                         landChanged = true;
                     }
                     if (cbSeed.Checked) {
-                        int yVal;
-                        if (optCavern) {
-                            yVal = 17;
-                        }
-                        else {
-                            yVal = 0;
-                        }
-                        List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), 18, 100, yVal, txtSeed.Text);
+                        int yVal = optCavern ? CavernMinY : OpenMinY;
+                        List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), DefaultSpawnCount, DefaultMinDistance, yVal, txtSeed.Text);
                         landData.ObjectLocations = points;
                         landChanged = true;
                     }
@@ -398,12 +382,9 @@ namespace W2_Terrain_Loader
 
         private void cbSeed_CheckedChanged(object sender, EventArgs e)
         {
-            if (cbSeed.Checked) {
-                txtSeed.Visible = true;
-            }
-            else {
+            txtSeed.Visible = cbSeed.Checked;
+            if (!cbSeed.Checked) {
                 txtSeed.Text = "";
-                txtSeed.Visible = false;
             }
         }
 
