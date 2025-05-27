@@ -21,6 +21,7 @@ namespace W2_Terrain_Loader
             public static string fileSelected = "";
             public static bool fileLocked = false;
             public static Random rnd = new Random();
+            public static System.Media.SoundPlayer sndSave = new System.Media.SoundPlayer(@"Data\\Wav\\Speech\\yessir.wav");
 
         }
 
@@ -190,6 +191,8 @@ namespace W2_Terrain_Loader
                     }
                     lblCurrent.Text = landStatus;
                     flpStatus.Visible = true;
+                    try { Global.sndSave.Play();}
+                    catch { }
                 }
                 catch (Exception ex) {
                     MessageBox.Show(ex.Message);
