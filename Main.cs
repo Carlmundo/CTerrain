@@ -18,8 +18,10 @@ namespace W2_Terrain_Loader
         public static class Global
         {
             public static string fileGame = "Data\\land.dat";
+            public static bool fileGameSet = true;
             public static string fileSelected = "";
             public static bool fileLocked = false;
+            public static string dirLevels = @"Levels\Import";
             public static Random rnd = new Random();
             public static System.Media.SoundPlayer sndSave = new System.Media.SoundPlayer(@"Data\\Wav\\Speech\\yessir.wav");
 
@@ -27,9 +29,22 @@ namespace W2_Terrain_Loader
 
         private void Main_Load(object sender, EventArgs e)
         {
-            LoadLand(Global.fileGame);
-            LoadFiles();
-            LockCheck(true);
+            if (File.Exists("worms2.exe")) {
+                if (File.Exists(Global.fileGame)) {
+                    LoadLand(Global.fileGame);
+                    LockCheck(true);
+                }
+                else {
+                    Global.fileGameSet = false;
+                    btnSave.Enabled = false;
+                }
+                LoadFiles();                
+            }
+            else {
+                MessageBox.Show("Could not find the Worms 2 folder. Please make sure you extract the CTerrain files so that CTerrain.exe is in the same folder as worms2.exe.");
+                Application.Exit();
+            }
+            
         }
 
         private void Main_Closing(object sender, EventArgs e)
@@ -38,10 +53,16 @@ namespace W2_Terrain_Loader
                 LockFile();
             }
         }
-
+        private void dirCheck()
+        {
+            if (!Directory.Exists(Global.dirLevels)) {
+                Directory.CreateDirectory(Global.dirLevels);
+            }
+        }
         private void LoadFiles()
         {
-            ListDirectory(treeLevels, "Levels\\Import");
+            dirCheck();
+            ListDirectory(treeLevels, Global.dirLevels);            
         }
 
         private void ListDirectory(TreeView treeView, string path)
@@ -89,6 +110,12 @@ namespace W2_Terrain_Loader
                     cbCavern.Checked = landData.TopBorder;
                 }
             }
+            catch (FileNotFoundException) {
+                pbLand.Image = null;
+                if (Global.fileGameSet) {
+                    MessageBox.Show("The land.dat file was not found.");
+                }
+            }
             catch (Exception e) {
                 pbLand.Image = null;
                 MessageBox.Show(e.Message);
@@ -110,8 +137,13 @@ namespace W2_Terrain_Loader
 
         private void LockCheck(bool changeText)
         {
-            FileInfo fInfo = new FileInfo(Global.fileGame);
-            Global.fileLocked = fInfo.IsReadOnly;
+            if (Global.fileGameSet || File.Exists(Global.fileGame)) {
+                FileInfo fInfo = new FileInfo(Global.fileGame);
+                Global.fileLocked = fInfo.IsReadOnly;
+            }
+            else {
+                Global.fileLocked = false;
+            }
             if (changeText) {
                 string btnText = " File";
                 btnLock.Text = (Global.fileLocked ? "Unlock" : "Lock") + btnText;
@@ -179,6 +211,8 @@ namespace W2_Terrain_Loader
                     if (landChanged) {
                         landData.Save(Global.fileGame);
                     }
+                    Global.fileGameSet = true;
+                    btnSave.Enabled = true;
                     LockFile();
                     string landStatus = Path.GetFileNameWithoutExtension(fileSet) + " | " + strLevelStyle;
                     if (txtSeed.Text.Length > 0) {
@@ -393,9 +427,9 @@ namespace W2_Terrain_Loader
 
         private void cbSave_Click(object sender, EventArgs e)
         {
-            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter a name for the map", "Save file", "New Map", 0, 0);
+            string input = Microsoft.VisualBasic.Interaction.InputBox("Enter a name for the map", "Save file", "New Map", -1, -1);
             if (input.Length > 0) {
-                string newFile = "Levels\\Import\\" + input + ".dat";
+                string newFile = Global.dirLevels + "\\" + input + ".dat";
                 bool fileCopy = true;
                 if (File.Exists(newFile) && MessageBox.Show("The file already exists. Do you want to overwrite it?", "Overwrite file?", MessageBoxButtons.YesNo) == DialogResult.No) {
                     fileCopy = false;
@@ -413,7 +447,8 @@ namespace W2_Terrain_Loader
 
         private void btnFolder_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", @"Levels\Import");
+            dirCheck();
+            Process.Start("explorer.exe", Global.dirLevels);
         }
     }
 }
