@@ -87,7 +87,7 @@
             flpStatus.Location = new Point(203, 190);
             flpStatus.Name = "flpStatus";
             flpStatus.Size = new Size(149, 60);
-            flpStatus.TabIndex = 4;
+            flpStatus.TabIndex = 0;
             flpStatus.Visible = false;
             // 
             // lblHeading
@@ -98,7 +98,7 @@
             lblHeading.Location = new Point(3, 0);
             lblHeading.Name = "lblHeading";
             lblHeading.Size = new Size(143, 30);
-            lblHeading.TabIndex = 4;
+            lblHeading.TabIndex = 0;
             lblHeading.Text = "Current Map:";
             // 
             // lblCurrent
@@ -108,7 +108,7 @@
             lblCurrent.Location = new Point(60, 30);
             lblCurrent.Name = "lblCurrent";
             lblCurrent.Size = new Size(28, 30);
-            lblCurrent.TabIndex = 3;
+            lblCurrent.TabIndex = 1;
             lblCurrent.Text = "...";
             // 
             // pbLand
@@ -128,7 +128,7 @@
             treeLevels.Location = new Point(3, 355);
             treeLevels.Name = "treeLevels";
             treeLevels.Size = new Size(549, 243);
-            treeLevels.TabIndex = 1;
+            treeLevels.TabIndex = 3;
             treeLevels.AfterSelect += treeLevels_AfterSelect;
             // 
             // flpButtons
@@ -141,7 +141,7 @@
             flpButtons.Location = new Point(116, 256);
             flpButtons.Name = "flpButtons";
             flpButtons.Size = new Size(322, 46);
-            flpButtons.TabIndex = 2;
+            flpButtons.TabIndex = 1;
             // 
             // btnLock
             // 
@@ -188,7 +188,7 @@
             flpOptions.Location = new Point(18, 308);
             flpOptions.Name = "flpOptions";
             flpOptions.Size = new Size(518, 41);
-            flpOptions.TabIndex = 5;
+            flpOptions.TabIndex = 2;
             // 
             // lblOptions
             // 
@@ -199,7 +199,7 @@
             lblOptions.Margin = new Padding(3, 0, 3, 2);
             lblOptions.Name = "lblOptions";
             lblOptions.Size = new Size(97, 30);
-            lblOptions.TabIndex = 2;
+            lblOptions.TabIndex = 0;
             lblOptions.Text = "Options:";
             // 
             // cbCavern
@@ -209,7 +209,7 @@
             cbCavern.Location = new Point(106, 3);
             cbCavern.Name = "cbCavern";
             cbCavern.Size = new Size(103, 34);
-            cbCavern.TabIndex = 0;
+            cbCavern.TabIndex = 1;
             cbCavern.Text = "Cavern";
             cbCavern.UseVisualStyleBackColor = true;
             // 
@@ -220,7 +220,7 @@
             cbSeed.Location = new Point(215, 3);
             cbSeed.Name = "cbSeed";
             cbSeed.Size = new Size(151, 34);
-            cbSeed.TabIndex = 1;
+            cbSeed.TabIndex = 2;
             cbSeed.Text = "Spawn Seed";
             cbSeed.UseVisualStyleBackColor = true;
             cbSeed.CheckedChanged += cbSeed_CheckedChanged;
@@ -246,7 +246,7 @@
             flpButtons2.Location = new Point(124, 604);
             flpButtons2.Name = "flpButtons2";
             flpButtons2.Size = new Size(306, 46);
-            flpButtons2.TabIndex = 6;
+            flpButtons2.TabIndex = 4;
             // 
             // btnSave
             // 
@@ -254,7 +254,7 @@
             btnSave.Location = new Point(3, 3);
             btnSave.Name = "btnSave";
             btnSave.Size = new Size(157, 40);
-            btnSave.TabIndex = 4;
+            btnSave.TabIndex = 0;
             btnSave.Text = "Save Last Map";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += cbSave_Click;
@@ -265,7 +265,7 @@
             btnFolder.Location = new Point(166, 3);
             btnFolder.Name = "btnFolder";
             btnFolder.Size = new Size(137, 40);
-            btnFolder.TabIndex = 5;
+            btnFolder.TabIndex = 1;
             btnFolder.Text = "Open Folder";
             btnFolder.UseVisualStyleBackColor = true;
             btnFolder.Click += btnFolder_Click;
