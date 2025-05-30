@@ -27,6 +27,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             tlpMain = new TableLayoutPanel();
             flpStatus = new FlowLayoutPanel();
             lblHeading = new Label();
@@ -276,6 +277,7 @@
             AutoSize = true;
             ClientSize = new Size(555, 653);
             Controls.Add(tlpMain);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MinimumSize = new Size(470, 600);
             Name = "Main";
             Text = "CTerrain";
