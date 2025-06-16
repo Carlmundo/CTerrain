@@ -243,9 +243,9 @@
             flpButtons2.AutoSize = true;
             flpButtons2.Controls.Add(btnSave);
             flpButtons2.Controls.Add(btnFolder);
-            flpButtons2.Location = new Point(124, 604);
+            flpButtons2.Location = new Point(108, 604);
             flpButtons2.Name = "flpButtons2";
-            flpButtons2.Size = new Size(306, 46);
+            flpButtons2.Size = new Size(338, 46);
             flpButtons2.TabIndex = 4;
             // 
             // btnSave
@@ -253,16 +253,16 @@
             btnSave.AutoSize = true;
             btnSave.Location = new Point(3, 3);
             btnSave.Name = "btnSave";
-            btnSave.Size = new Size(157, 40);
+            btnSave.Size = new Size(189, 40);
             btnSave.TabIndex = 0;
-            btnSave.Text = "Save Last Map";
+            btnSave.Text = "Save Current Map";
             btnSave.UseVisualStyleBackColor = true;
             btnSave.Click += cbSave_Click;
             // 
             // btnFolder
             // 
             btnFolder.AutoSize = true;
-            btnFolder.Location = new Point(166, 3);
+            btnFolder.Location = new Point(198, 3);
             btnFolder.Name = "btnFolder";
             btnFolder.Size = new Size(137, 40);
             btnFolder.TabIndex = 1;
