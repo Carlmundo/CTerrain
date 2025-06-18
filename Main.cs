@@ -108,6 +108,15 @@ namespace W2_Terrain_Loader
                     LandData landData = new LandData(fs);
                     pbLand.Image = landData.Foreground.ToBitmap();
                     cbCavern.Checked = landData.TopBorder;
+                    if (landData.Foreground.Description == "DualLayer") {
+                        cbSeed.Enabled = false;
+                        cbSeed.Checked = false;
+                        txtSeed.Enabled = false;
+                    }
+                    else {
+                        cbSeed.Enabled = true;
+                        txtSeed.Enabled = true;
+                    }
                 }
             }
             catch (FileNotFoundException) {
