@@ -27,12 +27,4 @@
     </Reference>
   </ItemGroup>
 
-  <Target Name="MoveDependencies" AfterTargets="Build">
-    <ItemGroup>
-      <AppDlls Include="$(OutputPath)*.dll" Exclude="$(OutputPath)$(AssemblyName).dll" />
-    </ItemGroup>
-    <Copy SourceFiles="@(AppDlls)" DestinationFolder="$(OutputPath)Data\CTerrain\" />
-    <Delete Files="@(AppDlls)" />
-  </Target>
-
 </Project>
