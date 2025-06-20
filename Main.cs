@@ -17,19 +17,19 @@ namespace W2_Terrain_Loader
 
         public static class Global
         {
-            public static string fileGame = "Data\\land.dat";
+            public static string fileGame = @"..\Data\land.dat";
             public static bool fileGameSet = true;
             public static string fileSelected = "";
             public static bool fileLocked = false;
-            public static string dirLevels = @"Levels\Import";
+            public static string dirLevels = @"..\Levels\Import";
             public static Random rnd = new Random();
-            public static System.Media.SoundPlayer sndSave = new System.Media.SoundPlayer(@"Data\\Wav\\Speech\\yessir.wav");
+            public static System.Media.SoundPlayer sndSave = new System.Media.SoundPlayer(@"..\Data\Wav\Speech\\yessir.wav");
 
         }
 
         private void Main_Load(object sender, EventArgs e)
         {
-            if (File.Exists("worms2.exe")) {
+            if (File.Exists("..\\worms2.exe")) {
                 if (File.Exists(Global.fileGame)) {
                     LoadLand(Global.fileGame);
                     LockCheck(true);
@@ -42,7 +42,7 @@ namespace W2_Terrain_Loader
                 LoadFiles();                
             }
             else {
-                MessageBox.Show("Could not find the Worms 2 folder. Please make sure you extract the CTerrain files so that CTerrain.exe is in the same folder as worms2.exe.");
+                MessageBox.Show("Could not find the Worms 2. Please make sure that the CTerrain folder is in the Worms 2 folder.");
                 Application.Exit();
             }
             
