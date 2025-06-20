@@ -37,6 +37,7 @@ namespace W2_Terrain_Loader
                 else {
                     Global.fileGameSet = false;
                     btnSave.Enabled = false;
+                    btnLock.Enabled = false;
                 }
                 LoadFiles();                
             }
@@ -108,22 +109,19 @@ namespace W2_Terrain_Loader
                     LandData landData = new LandData(fs);
                     pbLand.Image = landData.Foreground.ToBitmap();
                     cbCavern.Checked = landData.TopBorder;
-                    if (landData.Foreground.Description == "DualLayer") {
-                        cbSeed.Enabled = false;
-                        cbSeed.Checked = false;
-                        txtSeed.Enabled = false;
-                    }
-                    else {
-                        cbSeed.Enabled = true;
-                        txtSeed.Enabled = true;
-                    }
                 }
             }
-            catch (FileNotFoundException) {
+            catch (FileNotFoundException e) {
                 pbLand.Image = null;
-                if (Global.fileGameSet) {
-                    MessageBox.Show("The land.dat file was not found.");
-                }
+                if (!string.IsNullOrEmpty(e.FileName)) {
+                    string relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), e.FileName);
+                    if (Global.fileGameSet && relativePath == Global.fileGame) {
+                        MessageBox.Show("The land.dat file was not found.");
+                    }
+                    else {
+                        MessageBox.Show("File not found: " + relativePath);
+                    } 
+                } 
             }
             catch (Exception e) {
                 pbLand.Image = null;
@@ -162,14 +160,30 @@ namespace W2_Terrain_Loader
         private void LockFile()
         {
             LockCheck(false);
-            var attributes = File.GetAttributes(Global.fileGame);
-            if (Global.fileLocked) {
-                File.SetAttributes(Global.fileGame, attributes & ~FileAttributes.ReadOnly);
+            try {
+                var attributes = File.GetAttributes(Global.fileGame);
+                if (Global.fileLocked) {
+                    File.SetAttributes(Global.fileGame, attributes & ~FileAttributes.ReadOnly);
+                }
+                else {
+                    File.SetAttributes(Global.fileGame, attributes | FileAttributes.ReadOnly);
+                }
+                LockCheck(true);
             }
-            else {
-                File.SetAttributes(Global.fileGame, attributes | FileAttributes.ReadOnly);
+            catch (FileNotFoundException e) {
+                if (!string.IsNullOrEmpty(e.FileName)) {
+                    string relativePath = Path.GetRelativePath(Directory.GetCurrentDirectory(), e.FileName);
+                    if (relativePath == Global.fileGame) {
+                        Global.fileGameSet = false;
+                        btnSave.Enabled = false;
+                        btnLock.Enabled = false;
+                        MessageBox.Show("The land.dat file was not found. GIG2");
+                    }
+                }
             }
-            LockCheck(true);
+            catch (Exception e) {
+                MessageBox.Show(e.Message);
+            }
         }
 
         private void btnLock_Click(object sender, EventArgs e) => LockFile();
@@ -185,7 +199,7 @@ namespace W2_Terrain_Loader
         private void btnSet_Click(object sender, EventArgs e)
         {
             if (treeLevels.SelectedNode != null && treeLevels.SelectedNode.Tag != null) {
-                if (Global.fileLocked) { //Unlock if already locked to allow file copy
+                if (File.Exists(Global.fileGame) && Global.fileLocked) { //Unlock if already locked to allow file copy
                     LockFile();
                 }
                 try {
@@ -206,14 +220,14 @@ namespace W2_Terrain_Loader
                         landData.TopBorder = optCavern;
                         if (!landCavern && optCavern && !cbSeed.Checked) {
                             //Set new spawns with the set seed "Open", to avoid Worms spawning above the border
-                            List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), DefaultSpawnCount, DefaultMinDistance, CavernMinY, "Open");
+                            List<Point> points = GenerateSpacedSpawnpoints(landData.CollisionMask.ToBitmap(true), DefaultSpawnCount, DefaultMinDistance, CavernMinY, "Open");
                             landData.ObjectLocations = points;
                         }
                         landChanged = true;
                     }
                     if (cbSeed.Checked) {
                         int yVal = optCavern ? CavernMinY : OpenMinY;
-                        List<Point> points = GenerateSpacedSpawnpoints(landData.Foreground.ToBitmap(), DefaultSpawnCount, DefaultMinDistance, yVal, txtSeed.Text);
+                        List<Point> points = GenerateSpacedSpawnpoints(landData.CollisionMask.ToBitmap(true), DefaultSpawnCount, DefaultMinDistance, yVal, txtSeed.Text);
                         landData.ObjectLocations = points;
                         landChanged = true;
                     }
@@ -222,6 +236,7 @@ namespace W2_Terrain_Loader
                     }
                     Global.fileGameSet = true;
                     btnSave.Enabled = true;
+                    btnLock.Enabled = true;
                     LockFile();
                     string landStatus = Path.GetFileNameWithoutExtension(fileSet) + " | " + strLevelStyle;
                     if (txtSeed.Text.Length > 0) {

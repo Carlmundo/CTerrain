@@ -15,7 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Syroot.Worms.Worms2" Version="4.0.4" />
+    <PackageReference Include="Syroot.BinaryData" Version="5.2.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Syroot.Worms">
+      <HintPath>lib\Syroot.Worms.dll</HintPath>
+    </Reference>
+    <Reference Include="Syroot.Worms.Worms2">
+      <HintPath>lib\Syroot.Worms.Worms2.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <Target Name="MoveDependencies" AfterTargets="Build">
