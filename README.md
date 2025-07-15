@@ -4,8 +4,10 @@ Map manager for Worms 2.
 - Use custom colour maps. Create your own with [W2ColormapGen](https://github.com/Dawid8plc/W2ColormapGen) and they should appear in your map list.
 - Save the last map you played.
 
-## Install
-[Download the latest version](https://github.com/Carlmundo/CTerrain/releases/latest)
+## Install and run
+- [Download the latest release](https://github.com/Carlmundo/CTerrain/releases/latest) and extract the files to the Worms 2 game folder.
+- The 3 folders: CTerrain, Data & Levels should all be in the same folder as worms2.exe.
+- Open the CTerrain folder and run CTerrain.exe.
 
 ## How to use
 1. Select a map in the list.
